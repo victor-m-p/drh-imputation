@@ -1,0 +1,11 @@
+Things that make this really hard / might not make sense: 
+
+1. We code yesno as 2. Does it make sense to have this category? 
+Seems really weird to have this as an answer that we are using to predict and trying to predict. 
+Would make sense to me to do either 1 of 2 things. Either weight observations (like me and Simon did) or exclude. 
+In any case, do we ever want to predict "yesno" and is there enough of these cases for this to make sense?
+
+2. Sub-questions included in the analysis. Is this taken care of somehow or just weird? 
+
+3. Why do we only get one imputation PER missing dataset?
+Then we are doing single rather than multiple imputation... 
