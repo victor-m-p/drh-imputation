@@ -60,8 +60,8 @@ def check_impossible_cases(df_wide, df_relationships):
     def check_conditions(parent_id, parent_response, entry_id):
         # Find direct children of the current parent
         children = df_relationships[
-            df_relationships["Parent question ID"] == parent_id
-        ]["Question ID"]
+            df_relationships["parent_question_id"] == parent_id
+        ]["question_id"]
 
         for child_id in children:
             child_id_str = str(child_id)
@@ -87,10 +87,10 @@ def check_impossible_cases(df_wide, df_relationships):
 
     # Iterate through each entry in df_wide
     for _, entry in df_wide.iterrows():
-        entry_id = entry["ID"]
+        entry_id = entry["entry_id"]
         # Start with base questions (those with a 'parent_question_id' of 0) and their responses
-        base_questions = df_relationships[df_relationships["Parent question ID"] == 0][
-            "Question ID"
+        base_questions = df_relationships[df_relationships["parent_question_id"] == 0][
+            "question_id"
         ]
 
         for question_id in base_questions:
@@ -111,11 +111,11 @@ def generate_datasets(df, max_level):
     # find all level 2 questions
     encountered_parents = []
     for i in range(2, max_level + 1):
-        level_i_questions = df[df["question_level"] == i]["Question ID"]
+        level_i_questions = df[df["question_level"] == i]["question_id"]
 
         # Find the parents of level i questions
         parents_of_level_i = (
-            df[df["Question ID"].isin(level_i_questions)]["Parent question ID"]
+            df[df["question_id"].isin(level_i_questions)]["parent_question_id"]
             .unique()
             .tolist()
         )
@@ -125,7 +125,7 @@ def generate_datasets(df, max_level):
 
         # For the second dataset, exclude the parents that are only parents to level 2 questions
         level_i_and_below = df[
-            ~df["Question ID"].isin(encountered_parents) & (df["question_level"] <= i)
+            ~df["question_id"].isin(encountered_parents) & (df["question_level"] <= i)
         ]
         datasets[i] = level_i_and_below
 
