@@ -1,9 +1,10 @@
 library(tidyverse)
 library(devtools)
 source_url('https://raw.githubusercontent.com/R-miss-tastic/website/master/static/how-to/generate/amputation.R')
+source('project_support.R')
 
 # function to add nan 
-add_NA <- function(data, missing_pattern, missing_prop, id_vars, study_name){
+add_NA <- function(data, missing_pattern, missing_prop, id_vars, study_name, question_level){
   study_path <- file.path("output", study_name, "additional_NA")
   if(!dir.exists(study_path)) {
     dir.create(study_path, recursive = TRUE)
@@ -12,20 +13,25 @@ add_NA <- function(data, missing_pattern, missing_prop, id_vars, study_name){
   id_var <- data %>% select(all_of(id_vars))
   data_no_id <- data %>% select(-all_of(id_vars))
 
-  for(i in 1:2){ # Adjusted for testing
+  for(i in 1:10){ # Adjusted for testing
     # Add missing values
     missingness <- produce_NA(data_no_id, mechanism = missing_pattern, perc.missing = missing_prop, seed = i)
     missing <- cbind(id_var, missingness$data.incomp)
     missing_per = missing_prop * 100
-  
+
+    # if parent is NA, then child should be NA
+    df_wide_updated_na <- update_child_entries(missing, question_level, is.na, NA)
+
     # Write to CSV for study1
     write_csv(missing, paste0(study_path, "/NA_", missing_pattern, "_", missing_per, "_", i, ".csv"))
   }
 }
 
 # load data 
-df_study1 <- read_csv("../Data/Preprocessed/answers_study1.csv")
-df_study2 <- read_csv("../Data/Preprocessed/answers_study2.csv")
+answers_study1 <- read_csv("../Data/Preprocessed/answers_study1.csv", show_col_types = FALSE)
+answers_study2 <- read_csv("../Data/Preprocessed/answers_study2.csv", show_col_types = FALSE)
+qlevel_study1 <- read_csv("../Data/Preprocessed/question_level_study1.csv", show_col_types = FALSE)
+qlevel_study2 <- read_csv("../Data/Preprocessed/question_level_study2.csv", show_col_types = FALSE)
 id_vars <- readLines("id_vars.txt")
 
 # create missingness over grid
@@ -39,7 +45,7 @@ for(i in 1:nrow(grid_study1)){
   current_prop <- grid_study1$missing_prop[i]
   
   # Call function with the current parameters
-  add_NA(data = df_study1, missing_pattern = current_pattern, missing_prop = current_prop, id_vars = id_vars, study_name = "study1")
+  add_NA(data = answers_study1, missing_pattern = current_pattern, missing_prop = current_prop, id_vars = id_vars, study_name = "study1", question_level = qlevel_study1)
 }
 
 # add NA for study 2
@@ -49,5 +55,5 @@ for(i in 1:nrow(grid_study2)){
   current_prop <- grid_study2$missing_prop[i]
   
   # Call function with the current parameters
-  add_NA(data = df_study2, missing_pattern = current_pattern, missing_prop = current_prop, id_vars = id_vars, study_name = "study2")
+  add_NA(data = answers_study2, missing_pattern = current_pattern, missing_prop = current_prop, id_vars = id_vars, study_name = "study2", question_level = qlevel_study2)
 }

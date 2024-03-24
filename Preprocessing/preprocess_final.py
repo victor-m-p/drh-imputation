@@ -54,6 +54,27 @@ questions = questions[["entry_id", "question_id", "answer_value"]].drop_duplicat
 questions_small = questions[questions["question_id"].isin(small_dataset["question_id"])]
 questions_large = questions[questions["question_id"].isin(large_dataset["question_id"])]
 
+# add question level to these and save
+question_level = pd.read_csv("../Data/Preprocessed/question_level.csv")
+
+
+def process_question_level(question_level, question_subset):
+    question_subset = question_subset[["question_id"]].drop_duplicates()
+    question_subset = question_subset.merge(
+        question_level, on="question_id", how="inner"
+    )
+    return question_subset
+
+
+question_level_small = process_question_level(question_level, questions_small)
+question_level_large = process_question_level(question_level, questions_large)
+question_level_small.to_csv(
+    "../Data/Preprocessed/question_level_study1.csv", index=False
+)
+question_level_large.to_csv(
+    "../Data/Preprocessed/question_level_study2.csv", index=False
+)
+
 
 # pivot the questions
 def pivot_questions(questions, entry_metadata):

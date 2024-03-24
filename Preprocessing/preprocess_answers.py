@@ -129,3 +129,37 @@ questions = (
 
 # write data
 questions.to_csv("../Data/Preprocessed/answers.csv", index=False)
+
+
+# calculate level of question
+# find question level for all answers
+def find_question_level(question_id, drh):
+    computed_levels = (
+        {}
+    )  # Moved inside the function to reset each call or make it an argument to preserve state across calls
+
+    def inner_find_question_level(question_id):
+        # Base case: if the parent question ID is 0, the level is 0
+        if question_id == 0:
+            return 0
+        # If already computed, return the stored level
+        if question_id in computed_levels:
+            return computed_levels[question_id]
+
+        # Recursive case: find the parent question's ID and level
+        parent_id = drh.loc[
+            drh["question_id"] == question_id, "parent_question_id"
+        ].values[0]
+        level = inner_find_question_level(parent_id) + 1
+        # Store the computed level in the cache
+        computed_levels[question_id] = level
+        return level
+
+    return inner_find_question_level(question_id)
+
+
+question_level = questions[["question_id", "parent_question_id"]].drop_duplicates()
+question_level["question_level"] = question_level["question_id"].apply(
+    lambda x: find_question_level(x, question_level)
+)
+question_level.to_csv("../Data/Preprocessed/question_level.csv", index=False)

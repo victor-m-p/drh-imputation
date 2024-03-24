@@ -4,24 +4,24 @@ library(stringr)
 # Create index of variable types for GLRM and conversion of data type
 variables_types <- function(data){
   var_types <- data.frame(ID = colnames(data)) %>%
-    mutate(`Question ID` = gsub("_.*$","", ID)) %>%
-    mutate(`Question ID` = gsub("[^0-9.]", "", `Question ID`)) %>% #[^0-9.-]
-    mutate(`Question ID` = as.numeric(`Question ID`)) %>%
-    left_join(questions) %>%
+    mutate(question_id = gsub("_.*$","", ID)) %>%
+    mutate(question_id = gsub("[^0-9.]", "", question_id)) %>% #[^0-9.-]
+    mutate(question_id = as.numeric(question_id)) %>%
+    left_join(questions, by = "question_id") %>%
     mutate(loss_func = case_when(
         ID == "entry_id" ~ "Categorical",
         ID %in% c("year_from", "year_to", "log_area") ~ "Absolute",
         str_detect(ID, "^region_") ~ "Categorical",  # Match any ID starting with "region_"
-        `Data Type` %in% c("Nominal", "Nominal - Other", "Nominal - Multiple") ~ "Categorical",
-        `Data Type` %in% c("Discrete", "Continuous") ~ "Absolute")
+        data_type %in% c("Nominal", "Nominal - Other", "Nominal - Multiple") ~ "Categorical",
+        data_type %in% c("Discrete", "Continuous") ~ "Absolute")
     )
 }
 
 # Convert variables to correct class
 correct_class <- function(data, var_types) {
-  continuous <- filter(var_types, `Data Type` == "Continuous")
-  discrete <- filter(var_types, `Data Type` == "Discrete")
-  nominal <- filter(var_types, `Data Type` == "Nominal" | `Data Type` == "Nominal - Multiple" | `Data Type` == "Nominal - Other")
+  continuous <- filter(var_types, data_type == "Continuous")
+  discrete <- filter(var_types, data_type == "Discrete")
+  nominal <- filter(var_types, data_type == "Nominal" | data_type == "Nominal - Multiple" | data_type == "Nominal - Other")
   data <- data %>%
       mutate(entry_id = factor(entry_id)) %>%
       mutate(across(year_from:year_to, as.integer)) %>%
@@ -64,11 +64,10 @@ write_imputations <- function(data, study, algorithm, appendix) {
   }
 
   # Use mapply to write each element of the data list to its own CSV file
-  mapply(write_csv, data, paste0(algo_dir, "/", appendix, "_", names(data), '.csv'))
+  invisible(mapply(write_csv, data, paste0(algo_dir, "/", appendix, "_", names(data), '.csv'), SIMPLIFY = FALSE))
 }
 
-
-update_child_questions <- function(df_wide, df_relationships) {
+update_child_entries <- function(df_wide, df_relationships, condition_fn, action_value) {
   updated_df <- df_wide
   
   update_descendants <- function(parent_id, affected_entries, updated_df) {
@@ -79,7 +78,8 @@ update_child_questions <- function(df_wide, df_relationships) {
     for (child_id in children) {
       child_id_str <- paste0("X", child_id)  # Add the "X" prefix
       if (child_id_str %in% names(updated_df)) {
-        updated_df[affected_entries, child_id_str] <- NA
+        # Apply action based on the condition function's result
+        updated_df[affected_entries, child_id_str] <- action_value
       }
     }
     return(updated_df)  # Return the modified dataframe
@@ -92,7 +92,7 @@ update_child_questions <- function(df_wide, df_relationships) {
   for (question_id in root_questions) {
     question_id_str <- paste0("X", question_id)  # Add the "X" prefix
     if (question_id_str %in% names(updated_df)) {
-      affected_entries <- is.na(updated_df[[question_id_str]])
+      affected_entries <- condition_fn(updated_df[[question_id_str]])
       updated_df <- update_descendants(question_id, affected_entries, updated_df)  # Capture the returned, modified df
     }
   }
@@ -153,8 +153,6 @@ generate_datasets_ids_string <- function(df, max_level) {
   
   return(datasets_ids)
 }
-dataset_id_strings <- generate_datasets_ids_string(merged_df, max_level = max(merged_df$question_level))
-
 
 
 subset_dataframes <- function(dataframes_list, columns_to_keep) {
