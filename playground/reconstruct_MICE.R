@@ -9,8 +9,8 @@ mice_impute <- function(data, seed) {
   
   colnames(MICE_data) <- paste0("x_", colnames(MICE_data))
   MICE_imp <- mice::mice(MICE_data, print = FALSE, seed = seed, nnet.MaxNWts = 10000, remove.collinear=FALSE, remove.constant=FALSE) #remove.constant=FALSE, remove.collinear=FALSE)
-
 }
+
 
 correct_class <- function(data, var_types) {
   continuous <- filter(var_types, `Data Type` == "Continuous")

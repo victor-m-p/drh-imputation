@@ -1,7 +1,10 @@
 library(tidyverse)
 library(devtools)
 source_url('https://raw.githubusercontent.com/R-miss-tastic/website/master/static/how-to/generate/amputation.R')
-source('project_support.R')
+source('imputation_functions.R')
+
+
+# helper function
 
 # function to add nan 
 add_NA <- function(data, missing_pattern, missing_prop, id_vars, study_name, question_level){
@@ -22,8 +25,11 @@ add_NA <- function(data, missing_pattern, missing_prop, id_vars, study_name, que
     # if parent is NA, then child should be NA
     df_wide_updated_na <- update_child_entries(missing, question_level, is.na, NA)
 
+    # if parent is 0, then child should be 0 
+    df_wide_updated_zero <- update_child_entries(df_wide_updated_na, question_level, condition_fn_zero, 0)
+
     # Write to CSV for study1
-    write_csv(missing, paste0(study_path, "/NA_", missing_pattern, "_", missing_per, "_", i, ".csv"))
+    write_csv(df_wide_updated_zero, paste0(study_path, "/NA_", missing_pattern, "_", missing_per, "_", i, ".csv"))
   }
 }
 

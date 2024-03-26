@@ -18,12 +18,6 @@ questions = data[
     ]
 ].drop_duplicates()
 
-# only take answers in (1, 0)
-# 1 = yes
-# 0 = no
-# we will fill the rest of the useful questions with nan.
-questions = questions[questions["answer_value"].isin([1, 0])]
-
 # recode parent questions to be 0 if nan
 questions["parent_question_id"] = questions["parent_question_id"].fillna(0).astype(int)
 
@@ -105,13 +99,14 @@ drh_v6_poll = drh_v6_poll[["Question ID", "Data Type"]].drop_duplicates()
 drh_v6_poll = drh_v6_poll.rename(
     columns={"Question ID": "question_id", "Data Type": "data_type"}
 )
-
 questions = questions.merge(drh_v6_poll, on="question_id", how="inner")
+
+# do not take qualitative or Nominal - Multiple
 questions = questions[
     ~questions["data_type"].isin(["Qualitative", "Nominal - Multiple"])
 ]
 
-# specific types of questions
+# specific types of questions that we do not want
 questions = questions[
     ~questions["question_name"].str.contains(r"\[specify\]", regex=True)
 ]
@@ -119,6 +114,49 @@ questions = questions[
     ~questions["answer"].str.contains(r"\[specify in comments\]", regex=True)
 ]
 
+
+### handle questions by type ###
+
+### NB: currently we are just doing binary ###
+# For nominal only take yes (1) and no (0)
+nominal_questions = questions[questions["data_type"] == "Nominal"]
+nominal_questions = nominal_questions[nominal_questions["answer_value"].isin([1, 0])]
+
+"""
+# For "Discrete" extract numeric (int) value
+discrete_questions = questions[questions["data_type"] == "Discrete"]
+discrete_questions["answer_value"] = discrete_questions["answer"].str.extract("(\d+)")
+discrete_questions = discrete_questions[discrete_questions["answer_value"].notnull()]
+discrete_questions["answer_value"] = discrete_questions["answer_value"].astype(int)
+
+# for "Continuous" extract numeric (float) value
+pd.set_option("display.max_colwidth", None)
+continuous_questions = questions[questions["data_type"] == "Continuous"]
+continuous_questions["answer_value"] = continuous_questions["answer"].str.extract(
+    f"(\d*\.?\d+)"
+)
+continuous_questions = continuous_questions[
+    continuous_questions["answer_value"].notnull()
+]
+continuous_questions["answer_value"] = continuous_questions["answer_value"].astype(
+    float
+)
+
+# For "Nominal - Other" take the answer as is
+questions_nominal_other = questions[questions["data_type"] == "Nominal - Other"]
+
+# now collect these back
+questions = pd.concat(
+    [
+        nominal_questions,
+        discrete_questions,
+        continuous_questions,
+        questions_nominal_other,
+    ]
+)
+"""
+
+questions = nominal_questions
 
 # take random answer if inconsistent (major decision)
 questions = (

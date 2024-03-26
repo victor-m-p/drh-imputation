@@ -50,9 +50,30 @@ def get_count_answers(questions: pd.DataFrame, n: int) -> pd.DataFrame:
 small_dataset = get_count_answers(questions, 15)
 large_dataset = get_count_answers(questions, 100)
 
+
 questions = questions[["entry_id", "question_id", "answer_value"]].drop_duplicates()
 questions_small = questions[questions["question_id"].isin(small_dataset["question_id"])]
 questions_large = questions[questions["question_id"].isin(large_dataset["question_id"])]
+
+
+# in both cases only take entries with > 20% answers
+## for the large dataset
+def get_count_entries(questions: pd.DataFrame, threshold: float) -> pd.DataFrame:
+    """
+    Get the entries with more than threshold answers.
+    """
+    n_questions = questions["question_id"].nunique()
+    count_entries = questions.groupby("entry_id").size().reset_index(name="count")
+    count_entries["percentage"] = count_entries["count"] / n_questions
+    count_entries = count_entries[count_entries["percentage"] > threshold]
+    unique_entries = count_entries["entry_id"].unique().tolist()
+    questions = questions[questions["entry_id"].isin(unique_entries)]
+    return questions
+
+
+threshold = 0.20
+questions_small = get_count_entries(questions_small, threshold)
+questions_large = get_count_entries(questions_large, threshold)
 
 # add question level to these and save
 question_level = pd.read_csv("../Data/Preprocessed/question_level.csv")

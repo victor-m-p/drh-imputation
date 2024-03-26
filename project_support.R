@@ -608,13 +608,11 @@ mice_impute <- function(data, seed) {
     select(-ID)
   
   colnames(MICE_data) <- paste0("x_", colnames(MICE_data))
-  MICE_imp <- mice::mice(MICE_data, print = FALSE, seed = seed, nnet.MaxNWts = 10000)
+  MICE_imp <- mice::mice(MICE_data, m=1, print = FALSE, seed = seed, nnet.MaxNWts = 10000)
   MICE_imputed <- mice::complete(MICE_imp)
-  MICE_imputed <- MICE_imputed %>%
-    rename_all(~ sub("x_", "", names(MICE_imputed)))
-  ID <- data$ID
   MICE_imputed <- cbind(ID, MICE_imputed)
 }
+
 
 # MICE imputation using pmm (predictive mean matching)
 mice_impute_pmm <- function(data, seed) {
