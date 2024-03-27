@@ -15,7 +15,61 @@ from sklearn.metrics import (
 from itertools import combinations
 
 
-def grid_plot(
+def single_lineplot(
+    df,
+    metric,
+    hue,
+    figsize=(8, 5),
+    alpha=1,
+    ncol_legend=None,
+    outpath=None,
+    outname=None,
+):
+    # basic plot setup
+    fig, ax = plt.subplots(figsize=figsize)
+    fig.patch.set_facecolor("white")
+
+    # group by percent and hue, average metric
+    df_grouped = df.groupby(["percent", hue])[metric].mean().reset_index(name="average")
+
+    # line-plot
+    sns.lineplot(
+        data=df_grouped, x="percent", y="average", hue=hue, alpha=alpha, marker="o"
+    )
+
+    # aesthetics
+    plt.legend().remove()
+    plt.ylabel(f"Average {metric}", fontsize=12)
+    plt.xlabel("Percent Missing", fontsize=12)
+    x_ticks = df["percent"].unique()
+    plt.xticks(x_ticks)
+    plt.tight_layout()
+
+    # add legend
+    handles, labels = ax.get_legend_handles_labels()
+    ncol = ncol_legend if ncol_legend else len(handles)
+    nrow = np.ceil(len(df[hue].unique()) / ncol)
+    y_align_legend = -0.08 * nrow
+    fig.legend(
+        handles,
+        labels,
+        loc="lower center",
+        bbox_to_anchor=(0.5, y_align_legend),
+        ncol=ncol,
+        frameon=False,
+        fontsize=12,
+    )
+
+    plt.subplots_adjust(left=0.15, bottom=0.1)
+
+    # save or show
+    if outpath:
+        plt.savefig(os.path.join(outpath, outname), dpi=300, bbox_inches="tight")
+    else:
+        plt.show()
+
+
+def multiple_lineplots(
     df,
     metric,
     hue,
@@ -25,10 +79,14 @@ def grid_plot(
     alpha=1,
     color=None,
     sharey="none",
+    ncol_legend=None,
+    outpath=None,
+    outname=None,
 ):
     unique_grid_values = df[grid].unique()
     n_subplots = len(unique_grid_values)
     fig, ax = plt.subplots(n_subplots, 1, figsize=figsize, sharex=True)
+    fig.patch.set_facecolor("white")
 
     # Initialize variables to determine global y-axis limits if needed
     global_ymin = float("inf")
@@ -70,7 +128,7 @@ def grid_plot(
         ax[num].legend().remove()
         ax[num].set_ylabel("")
         ax[num].set_title(f"{metric} ({grid} = {ele})")
-        ax[num].set_xlabel("Percent Missing")
+        ax[num].set_xlabel("Percent Missing", fontsize=12)
         x_ticks = df_subset["percent"].unique()
         ax[num].set_xticks(x_ticks)
 
@@ -90,19 +148,26 @@ def grid_plot(
     plt.tight_layout()
     if legend:
         handles, labels = ax[0].get_legend_handles_labels()
+        ncol = ncol_legend if ncol_legend else len(handles)
+        nrow = int(np.ceil(n_subplots / ncol))
+        y_align_legend = -0.08 * nrow
         fig.legend(
             handles,
             labels,
             loc="lower center",
-            bbox_to_anchor=(0.5, -0.03),
-            ncol=len(handles),
+            bbox_to_anchor=(0.5, y_align_legend),
+            ncol=ncol,
             frameon=False,
+            fontsize=12,
         )
 
-    plt.subplots_adjust(
-        left=0.15, bottom=0.1
-    )  # Adjust the left and bottom to make space for the global y-label and legend
-    plt.show()
+    plt.subplots_adjust(left=0.15, bottom=0.1)
+
+    # save or sjow
+    if outpath:
+        plt.savefig(os.path.join(outpath, outname), dpi=300, bbox_inches="tight")
+    else:
+        plt.show()
 
 
 # consider whether we are actually going to need this
