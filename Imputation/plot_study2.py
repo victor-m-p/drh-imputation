@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 from evaluation_functions import multiple_lineplots, single_lineplot
 
 df_metrics = pd.read_csv("evaluation/metrics_study2.csv")
-df_metrics
+
 df_long = pd.melt(
     df_metrics,
-    id_vars=["question", "method", "type", "percent", "iter"],
+    id_vars=["Question", "Method", "Type", "Percent", "Iter"],
     value_vars=["Accuracy", "Mean Percent Bias", "Matthews Correlation"],
     var_name="metric",
     value_name="values",
@@ -18,12 +18,13 @@ df_long = pd.melt(
 multiple_lineplots(
     df=df_long,
     metric="values",
-    hue="method",
+    hue="Method",
     grid="metric",
     ncol_legend=4,
-    # outpath="figures/study1",
-    # utname="overall_metrics.png",
+    outpath="figures/study2",
+    outname="overall_metrics.png",
 )
+
 
 """ 
 MICE (standard) surprisingly bad (MPB, Accuracy). 
@@ -44,8 +45,8 @@ single_lineplot(
     metric="Squared Difference",
     hue="method",
     ncol_legend=4,
-    outpath="figures/study1",
-    outname="correlation_difference.png",
+    # outpath="figures/study1",
+    # outname="correlation_difference.png",
 )
 
 """ 

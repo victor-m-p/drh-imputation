@@ -29,19 +29,19 @@ def single_lineplot(
     fig, ax = plt.subplots(figsize=figsize)
     fig.patch.set_facecolor("white")
 
-    # group by percent and hue, average metric
-    df_grouped = df.groupby(["percent", hue])[metric].mean().reset_index(name="average")
+    # group by Percent and hue, average metric
+    df_grouped = df.groupby(["Percent", hue])[metric].mean().reset_index(name="average")
 
     # line-plot
     sns.lineplot(
-        data=df_grouped, x="percent", y="average", hue=hue, alpha=alpha, marker="o"
+        data=df_grouped, x="Percent", y="average", hue=hue, alpha=alpha, marker="o"
     )
 
     # aesthetics
     plt.legend().remove()
     plt.ylabel(f"Average {metric}", fontsize=12)
     plt.xlabel("Percent Missing", fontsize=12)
-    x_ticks = df["percent"].unique()
+    x_ticks = df["Percent"].unique()
     plt.xticks(x_ticks)
     plt.tight_layout()
 
@@ -103,7 +103,7 @@ def multiple_lineplots(
             # Subset the data for each hue value
             df_grouped = (
                 df_subset[df_subset[hue] == hue_value]
-                .groupby(["percent"])[metric]
+                .groupby(["Percent"])[metric]
                 .mean()
                 .reset_index(name="average")
             )
@@ -111,7 +111,7 @@ def multiple_lineplots(
             # Plotting with specified or default color
             sns.lineplot(
                 data=df_grouped,
-                x="percent",
+                x="Percent",
                 y="average",
                 label=hue_value if legend else None,
                 color=color if color else None,
@@ -129,7 +129,7 @@ def multiple_lineplots(
         ax[num].set_ylabel("")
         ax[num].set_title(f"{metric} ({grid} = {ele})")
         ax[num].set_xlabel("Percent Missing", fontsize=12)
-        x_ticks = df_subset["percent"].unique()
+        x_ticks = df_subset["Percent"].unique()
         ax[num].set_xticks(x_ticks)
 
     # If sharey='all', set the same y-axis limits for all subplots
@@ -290,11 +290,11 @@ def basic_metrics_study1(method_grid, df_complete, nan_path, data_path):
     df_metrics = pd.DataFrame(
         data_list,
         columns=[
-            "question",
-            "method",
-            "type",
-            "percent",
-            "iter",
+            "Question",
+            "Method",
+            "Type",
+            "Percent",
+            "Iter",
             "RMSE",
             "Mean Percent Bias",
             "Accuracy",
@@ -304,8 +304,8 @@ def basic_metrics_study1(method_grid, df_complete, nan_path, data_path):
             "Matthews Correlation",
         ],
     )
-    df_metrics["iter"] = df_metrics["iter"].astype(int)
-    df_metrics = df_metrics.sort_values(by=["method", "type", "percent", "iter"])
+    df_metrics["Iter"] = df_metrics["Iter"].astype(int)
+    df_metrics = df_metrics.sort_values(by=["Method", "Type", "Percent", "Iter"])
     return df_metrics
 
 
@@ -364,18 +364,18 @@ def pairwise_metrics_study1(methods, df_complete, data_path, constant_variables=
     evaluation_df = pd.DataFrame(
         evaluation_list,
         columns=[
-            "type",
-            "percent",
-            "iter",
-            "method",
+            "Type",
+            "Percent",
+            "Iter",
+            "Method",
             "Frobenius Norm",
             "Squared Difference",
             "MAE",
             "complete_data",
         ],
     )
-    evaluation_df["iter"] = evaluation_df["iter"].astype(int)
-    evaluation_df = evaluation_df.sort_values(by=["type", "percent", "iter"])
+    evaluation_df["Iter"] = evaluation_df["Iter"].astype(int)
+    evaluation_df = evaluation_df.sort_values(by=["Type", "Percent", "Iter"])
     return evaluation_df
 
 
@@ -443,16 +443,98 @@ def pairwise_correlations_study1(
     evaluation_df = pd.DataFrame(
         evaluation_list,
         columns=[
-            "type",
-            "percent",
-            "iter",
-            "method",
+            "Type",
+            "Percent",
+            "Iter",
+            "Method",
             "var_x",
             "var_y",
             "corr_complete",
             "corr_imputed",
         ],
     )
-    evaluation_df["iter"] = evaluation_df["iter"].astype(int)
-    evaluation_df = evaluation_df.sort_values(by=["type", "percent", "iter"])
+    evaluation_df["Iter"] = evaluation_df["Iter"].astype(int)
+    evaluation_df = evaluation_df.sort_values(by=["Type", "Percent", "Iter"])
     return evaluation_df
+
+
+def basic_metrics_study2(method_grid, df_complete, nan_path, data_path):
+
+    question_columns = [col for col in df_complete.columns if col.startswith("X")]
+    df_complete = df_complete[question_columns]
+    nan_files = os.listdir(nan_path)
+    data_list = []
+
+    for nan_file in nan_files:
+        # get metadata
+        missing_type, missing_percent, iter = re.match(
+            r"NA_(MCAR|MNAR|MAR)_(\d+)_(\d+).csv", nan_file
+        ).groups()
+
+        # load nan file
+        df_nan = pd.read_csv(os.path.join(nan_path, nan_file))
+
+        # loop over methods
+        for method in method_grid:
+            # load methods
+            path_name, file_prepend = method
+            filename = f"{file_prepend}_{missing_type}_{missing_percent}_{iter}.csv"
+            df_impute = pd.read_csv(os.path.join(data_path, path_name, filename))
+
+            # loop over columns
+            for question_column in question_columns:
+                # where we have nan in additional nan
+                df_nan_c = df_nan[question_column]
+                mat_nan_c = df_nan_c.to_numpy()
+                mask_nan_c = np.isnan(mat_nan_c)
+                # where we do not have nan in original data
+                df_complete_c = df_complete[question_column]
+                mat_complete_c = df_complete_c.to_numpy()
+                mask_complete_c = ~np.isnan(mat_complete_c)
+                # combine the masks (i.e., where we have added nan, but not nan in original)
+                combined_mask_c = mask_nan_c & mask_complete_c
+                # get imputed values
+                df_impute_c = df_impute[question_column]
+                mat_impute_c = df_impute_c.to_numpy()
+                # get y_pred and y_true
+                y_pred = mat_impute_c[combined_mask_c]
+                y_true = mat_complete_c[combined_mask_c]
+                rmse, mpb, accuracy, precision, recall, f1, matthews_corr = (
+                    calculate_metrics(y_true, y_pred)
+                )
+                data_list.append(
+                    [
+                        question_column,
+                        path_name,
+                        missing_type,
+                        missing_percent,
+                        iter,
+                        rmse,
+                        mpb,
+                        accuracy,
+                        precision,
+                        recall,
+                        f1,
+                        matthews_corr,
+                    ],
+                )
+    df_metrics = pd.DataFrame(
+        data_list,
+        columns=[
+            "Question",
+            "Method",
+            "Type",
+            "Percent",
+            "Iter",
+            "RMSE",
+            "Mean Percent Bias",
+            "Accuracy",
+            "Precision",
+            "Recall",
+            "F1 score",
+            "Matthews Correlation",
+        ],
+    )
+    df_metrics["Iter"] = df_metrics["Iter"].astype(int)
+    df_metrics = df_metrics.sort_values(by=["Method", "Type", "Percent", "Iter"])
+    return df_metrics
