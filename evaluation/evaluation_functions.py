@@ -1,3 +1,10 @@
+"""
+VMP 2023-04-10:
+- plotting functions
+- correlation functions
+- overall metrics functions
+"""
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +22,7 @@ from sklearn.metrics import (
 from itertools import combinations
 
 
+### for plotting ###
 def single_lineplot(
     df,
     metric,
@@ -170,7 +178,97 @@ def multiple_lineplots(
         plt.show()
 
 
-# calculate a host of metrics.
+#### for correlations ####
+def calculate_correlation(df, column_x, column_y):
+    """Calculate the correlation between two columns in a DataFrame."""
+    df_filter = df[[column_x, column_y]]
+    correlation_matrix = df_filter.corr().to_numpy()
+    correlation_value = correlation_matrix[np.triu_indices(2, k=1)][0]
+    return correlation_value
+
+
+def flag_constant_variables(methods, df_complete, data_path):
+    """if a variable is constant in any nan file, flag it as constant (for correlations)"""
+    question_columns = [col for col in df_complete.columns if col.startswith("X")]
+    constant_columns = []
+    for method in methods:
+        files = os.listdir(os.path.join(data_path, method))
+        for file in files:
+            df_impute = pd.read_csv(os.path.join(data_path, method, file))
+            for question_column in question_columns:
+                if len(df_impute[question_column].unique()) == 1:
+                    constant_columns.append(question_column)
+    constant_columns = list(np.unique(np.array(constant_columns)))
+    return constant_columns
+
+
+def process_file_study1(file, data_path, column_pairs, df_complete, pattern):
+    """Process each file to compute correlations."""
+    method, type_, percent, iter_ = re.match(pattern, file).groups()
+    inpath_imputed = os.path.join(data_path, method, file)
+    imputed_data = pd.read_csv(inpath_imputed)
+    evaluations = []
+    for column_x, column_y in column_pairs:
+        complete_value = calculate_correlation(df_complete, column_x, column_y)
+        imputed_value = calculate_correlation(imputed_data, column_x, column_y)
+        evaluations.append(
+            [
+                type_,
+                percent,
+                iter_,
+                method,
+                column_x,
+                column_y,
+                complete_value,
+                imputed_value,
+            ]
+        )
+    return evaluations
+
+
+def gather_data_study1(data_list):
+    evaluation_df = pd.DataFrame(
+        data_list,
+        columns=[
+            "Type",
+            "Percent",
+            "Iter",
+            "Method",
+            "var_x",
+            "var_y",
+            "corr_complete",
+            "corr_imputed",
+        ],
+    )
+    evaluation_df["Iter"] = evaluation_df["Iter"].astype(int)
+    evaluation_df = evaluation_df.sort_values(by=["Type", "Percent", "Iter"])
+    return evaluation_df
+
+
+def pairwise_correlations_study1(
+    methods, df_complete, data_path, constant_variables=None
+):
+    question_columns = [col for col in df_complete.columns if col.startswith("X")]
+    question_columns = [
+        col for col in question_columns if col not in constant_variables
+    ]
+    column_pairs = list(combinations(question_columns, 2))
+
+    pattern = r"^(.*?)_(MCAR|MAR|MNAR)_(\d+)_(\d+)\..*?(?:csv|txt)$"
+    evaluation_list = []
+    for method in methods:
+        files = os.listdir(os.path.join(data_path, method))
+        for file in files:
+            evaluations = process_file_study1(
+                file, data_path, column_pairs, df_complete, pattern
+            )
+            evaluation_list.extend(evaluations)
+
+    evaluation_df = gather_data_study1(evaluation_list)
+    return evaluation_df
+
+
+### for overall metrics ###
 def calculate_metrics(y_true, y_pred):
 
     # Calculate Mean Percent Bias
@@ -203,46 +301,158 @@ def calculate_metrics(y_true, y_pred):
     return rmse, mpb, accuracy, precision, recall, f1, matthews_corr
 
 
-#### refactoring here ####
-def extract_info_from_filename(pattern, filename):
-    """Extract information from filename based on the given pattern."""
-    match = re.match(pattern, filename)
-    if match:
-        _, type_, percent, iter_ = match.groups()
-        iter_ = iter_.split(".")[0]
-        return type_, percent, iter_
-    return None, None, None
+def process_column_study1(
+    df_complete,
+    df_nan,
+    df_impute,
+    question_column,
+    method,
+    missing_type,
+    missing_percent,
+    iter,
+    data_list,
+):
+    # get y_true and y_pred for specific indices (where we have nan in additional nan)
+    valid_indices = df_nan[question_column].isna().to_numpy()
+    y_true = df_complete[question_column].to_numpy()[valid_indices]
+    y_pred = df_impute[question_column].to_numpy()[valid_indices]
+
+    # calculate metrics
+    metrics = calculate_metrics(y_true, y_pred)
+
+    # append data to list
+    data_list.append(
+        [question_column, method, missing_type, missing_percent, iter, *metrics]
+    )
 
 
-def calculate_correlation(df, column_x, column_y):
-    """Calculate the correlation between two columns in a DataFrame."""
-    df_filter = df[[column_x, column_y]]
-    correlation_matrix = df_filter.corr().to_numpy()
-    correlation_value = correlation_matrix[np.triu_indices(2, k=1)][0]
-    return correlation_value
+def process_column_study2(
+    df_complete,
+    df_nan,
+    df_impute,
+    question_column,
+    method,
+    missing_type,
+    missing_percent,
+    iter,
+    data_list,
+):
+    # where we have nan in additional nan
+    df_nan_c = df_nan[question_column]
+    mat_nan_c = df_nan_c.to_numpy()
+    mask_nan_c = np.isnan(mat_nan_c)
+    # where we do not have nan in original data (otherwise we cannot compare)
+    df_complete_c = df_complete[question_column]
+    mat_complete_c = df_complete_c.to_numpy()
+    mask_complete_c = ~np.isnan(mat_complete_c)
+    # combine the masks (i.e., where we have added nan, but not nan in original)
+    combined_mask_c = mask_nan_c & mask_complete_c
+    # get imputed values
+    df_impute_c = df_impute[question_column]
+    mat_impute_c = df_impute_c.to_numpy()
+    # get y_pred and y_true
+    y_pred = mat_impute_c[combined_mask_c]
+    y_true = mat_complete_c[combined_mask_c]
+    # calculate metrics
+    metrics = calculate_metrics(y_true, y_pred)
+    # append data to list
+    data_list.append(
+        [question_column, method, missing_type, missing_percent, iter, *metrics]
+    )
+    return data_list
 
 
-def flag_constant_variables(methods, df_complete, data_path):
-    """if a variable is constant in any nan file, flag it as constant (for correlations)"""
+def gather_metrics(data_list):
+    df_metrics = pd.DataFrame(
+        data_list,
+        columns=[
+            "Question",
+            "Method",
+            "Type",
+            "Percent",
+            "Iter",
+            "RMSE",
+            "Mean Percent Bias",
+            "Accuracy",
+            "Precision",
+            "Recall",
+            "F1 score",
+            "Matthews Correlation",
+        ],
+    )
+    df_metrics["Iter"] = df_metrics["Iter"].astype(int)
+    df_metrics = df_metrics.sort_values(by=["Method", "Type", "Percent", "Iter"])
+    return df_metrics
+
+
+def basic_metrics_study1(method_grid, df_complete, nan_path, data_path):
+    pattern = r"NA_(MCAR|MNAR|MAR)_(\d+)_(\d+).csv"
     question_columns = [col for col in df_complete.columns if col.startswith("X")]
-    constant_columns = []
-    for method in methods:
-        files = os.listdir(os.path.join(data_path, method))
-        for file in files:
-            df_impute = pd.read_csv(os.path.join(data_path, method, file))
+    df_complete = df_complete[question_columns]
+    nan_files = os.listdir(nan_path)
+    data_list = []
+
+    for nan_file in nan_files:
+        missing_type, missing_percent, iter = re.match(pattern, nan_file).groups()
+        df_nan = pd.read_csv(os.path.join(nan_path, nan_file))
+
+        for method in method_grid:
+            filename = f"{method}_{missing_type}_{missing_percent}_{iter}.csv"
+            df_impute = pd.read_csv(os.path.join(data_path, method, filename))
+
             for question_column in question_columns:
-                if len(df_impute[question_column].unique()) == 1:
-                    constant_columns.append(question_column)
-    constant_columns = list(np.unique(np.array(constant_columns)))
-    return constant_columns
+                process_column_study1(
+                    df_complete,
+                    df_nan,
+                    df_impute,
+                    question_column,
+                    method,
+                    missing_type,
+                    missing_percent,
+                    iter,
+                    data_list,
+                )
+
+    df_metrics = gather_metrics(data_list)
+    return df_metrics
 
 
-def process_file(method, file, data_path, column_pairs, df_complete, pattern):
-    """Process each file to compute correlations."""
-    type_, percent, iter_ = extract_info_from_filename(pattern, file)
-    if type_ is None:  # Skip files that don't match the pattern
-        return []
+def basic_metrics_study2(method_grid, df_complete, nan_path, data_path):
+    pattern = r"NA_(MCAR|MNAR|MAR)_(\d+)_(\d+).csv"
+    question_columns = [col for col in df_complete.columns if col.startswith("X")]
+    df_complete = df_complete[question_columns]
+    nan_files = os.listdir(nan_path)
+    data_list = []
 
+    for nan_file in nan_files:
+        missing_type, missing_percent, iter = re.match(pattern, nan_file).groups()
+        df_nan = pd.read_csv(os.path.join(nan_path, nan_file))
+
+        for method in method_grid:
+            filename = f"{method}_{missing_type}_{missing_percent}_{iter}.csv"
+            df_impute = pd.read_csv(os.path.join(data_path, method, filename))
+
+            for question_column in question_columns:
+                process_column_study2(
+                    df_complete,
+                    df_nan,
+                    df_impute,
+                    question_column,
+                    method,
+                    missing_type,
+                    missing_percent,
+                    iter,
+                    data_list,
+                )
+
+    df_metrics = gather_metrics(data_list)
+    return df_metrics
+
+
+### for multiple imputation ###
+def process_file_study3(file, data_path, column_pairs, df_complete, pattern):
+    """Process each imputed file to compute correlations."""
+    method, type_, percent, iter_, imputation_iter = re.match(pattern, file).groups()
     inpath_imputed = os.path.join(data_path, method, file)
     imputed_data = pd.read_csv(inpath_imputed)
     evaluations = []
@@ -254,6 +464,7 @@ def process_file(method, file, data_path, column_pairs, df_complete, pattern):
                 type_,
                 percent,
                 iter_,
+                imputation_iter,
                 method,
                 column_x,
                 column_y,
@@ -264,32 +475,14 @@ def process_file(method, file, data_path, column_pairs, df_complete, pattern):
     return evaluations
 
 
-def pairwise_correlations_study1(
-    methods, df_complete, data_path, constant_variables=None
-):
-    question_columns = [col for col in df_complete.columns if col.startswith("X")]
-    if constant_variables:
-        question_columns = [
-            col for col in question_columns if col not in constant_variables
-        ]
-    column_pairs = list(combinations(question_columns, 2))
-
-    pattern = r"^(.*?)_(MCAR|MAR|MNAR)_(\d+)_(\d+)\..*?(?:csv|txt)$"
-    evaluation_list = []
-    for method in methods:
-        files = os.listdir(os.path.join(data_path, method))
-        for file in files:
-            evaluations = process_file(
-                method, file, data_path, column_pairs, df_complete, pattern
-            )
-            evaluation_list.extend(evaluations)
-
+def gather_data_study3(data_list):
     evaluation_df = pd.DataFrame(
-        evaluation_list,
+        data_list,
         columns=[
             "Type",
             "Percent",
             "Iter",
+            "Imputation_Iter",
             "Method",
             "var_x",
             "var_y",
@@ -297,172 +490,35 @@ def pairwise_correlations_study1(
             "corr_imputed",
         ],
     )
-    evaluation_df["Iter"] = evaluation_df["Iter"].astype(int)
-    evaluation_df = evaluation_df.sort_values(by=["Type", "Percent", "Iter"])
+    evaluation_df[["Iter", "Imputation_Iter"]] = evaluation_df[
+        ["Iter", "Imputation_Iter"]
+    ].astype(int)
+    evaluation_df = evaluation_df.sort_values(
+        by=["Type", "Percent", "Iter", "Imputation_Iter"]
+    )
     return evaluation_df
 
 
-# calculates metrics within variables
-def basic_metrics_study1(method_grid, df_complete, nan_path, data_path):
-    """
-    calculate metrics by:
-    - variable
-    - method
-    - condition (missing type, missing percent, iteration)
-    """
+def pairwise_correlations_study3(
+    methods, df_complete, data_path, constant_variables=None
+):
     question_columns = [col for col in df_complete.columns if col.startswith("X")]
-    df_complete = df_complete[question_columns]
+    question_columns = [
+        col for col in question_columns if col not in constant_variables
+    ]
+    column_pairs = list(combinations(question_columns, 2))
 
-    nan_files = os.listdir(nan_path)
-    data_list = []
-    for nan_file in nan_files:
-        # get metadata
-        missing_type, missing_percent, iter = re.match(
-            r"NA_(MCAR|MNAR|MAR)_(\d+)_(\d+).csv", nan_file
-        ).groups()
+    # Updated pattern to include imputation iteration
+    pattern = r"^(.*?)_(MCAR|MAR|MNAR)_(\d+)_(\d+)_(\d+)\..*?(?:csv|txt)$"
+    evaluation_list = []
 
-        # load nan file
-        df_nan = pd.read_csv(os.path.join(nan_path, nan_file))
+    for method in methods:
+        files = os.listdir(os.path.join(data_path, method))
+        for file in files:
+            evaluations = process_file_study3(
+                file, data_path, column_pairs, df_complete, pattern
+            )
+            evaluation_list.extend(evaluations)
 
-        # loop over methods
-        for method in method_grid:
-            # load methods
-            path_name, file_prepend = method
-            filename = f"{file_prepend}_{missing_type}_{missing_percent}_{iter}.csv"
-            df_impute = pd.read_csv(os.path.join(data_path, path_name, filename))
-
-            # loop over columns
-            for question_column in question_columns:
-                # valid indices for the column
-                df_nan_c = df_nan[question_column]
-                valid_indices = df_nan_c.isna()
-                valid_indices = valid_indices.to_numpy()
-                # y_true for the column
-                y_true = df_complete[question_column]
-                y_true = y_true.to_numpy()
-                y_true = y_true[valid_indices]
-                # imputed for the column
-                y_pred = df_impute[question_column]
-                y_pred = y_pred.to_numpy()
-                y_pred = y_pred[valid_indices]
-                rmse, mpb, accuracy, precision, recall, f1, matthews_corr = (
-                    calculate_metrics(y_true, y_pred)
-                )
-                data_list.append(
-                    [
-                        question_column,
-                        path_name,
-                        missing_type,
-                        missing_percent,
-                        iter,
-                        rmse,
-                        mpb,
-                        accuracy,
-                        precision,
-                        recall,
-                        f1,
-                        matthews_corr,
-                    ],
-                )
-    df_metrics = pd.DataFrame(
-        data_list,
-        columns=[
-            "Question",
-            "Method",
-            "Type",
-            "Percent",
-            "Iter",
-            "RMSE",
-            "Mean Percent Bias",
-            "Accuracy",
-            "Precision",
-            "Recall",
-            "F1 score",
-            "Matthews Correlation",
-        ],
-    )
-    df_metrics["Iter"] = df_metrics["Iter"].astype(int)
-    df_metrics = df_metrics.sort_values(by=["Method", "Type", "Percent", "Iter"])
-    return df_metrics
-
-
-def basic_metrics_study2(method_grid, df_complete, nan_path, data_path):
-
-    question_columns = [col for col in df_complete.columns if col.startswith("X")]
-    df_complete = df_complete[question_columns]
-    nan_files = os.listdir(nan_path)
-    data_list = []
-
-    for nan_file in nan_files:
-        # get metadata
-        missing_type, missing_percent, iter = re.match(
-            r"NA_(MCAR|MNAR|MAR)_(\d+)_(\d+).csv", nan_file
-        ).groups()
-
-        # load nan file
-        df_nan = pd.read_csv(os.path.join(nan_path, nan_file))
-
-        # loop over methods
-        for method in method_grid:
-            # load methods
-            path_name, file_prepend = method
-            filename = f"{file_prepend}_{missing_type}_{missing_percent}_{iter}.csv"
-            df_impute = pd.read_csv(os.path.join(data_path, path_name, filename))
-
-            # loop over columns
-            for question_column in question_columns:
-                # where we have nan in additional nan
-                df_nan_c = df_nan[question_column]
-                mat_nan_c = df_nan_c.to_numpy()
-                mask_nan_c = np.isnan(mat_nan_c)
-                # where we do not have nan in original data
-                df_complete_c = df_complete[question_column]
-                mat_complete_c = df_complete_c.to_numpy()
-                mask_complete_c = ~np.isnan(mat_complete_c)
-                # combine the masks (i.e., where we have added nan, but not nan in original)
-                combined_mask_c = mask_nan_c & mask_complete_c
-                # get imputed values
-                df_impute_c = df_impute[question_column]
-                mat_impute_c = df_impute_c.to_numpy()
-                # get y_pred and y_true
-                y_pred = mat_impute_c[combined_mask_c]
-                y_true = mat_complete_c[combined_mask_c]
-                rmse, mpb, accuracy, precision, recall, f1, matthews_corr = (
-                    calculate_metrics(y_true, y_pred)
-                )
-                data_list.append(
-                    [
-                        question_column,
-                        path_name,
-                        missing_type,
-                        missing_percent,
-                        iter,
-                        rmse,
-                        mpb,
-                        accuracy,
-                        precision,
-                        recall,
-                        f1,
-                        matthews_corr,
-                    ],
-                )
-    df_metrics = pd.DataFrame(
-        data_list,
-        columns=[
-            "Question",
-            "Method",
-            "Type",
-            "Percent",
-            "Iter",
-            "RMSE",
-            "Mean Percent Bias",
-            "Accuracy",
-            "Precision",
-            "Recall",
-            "F1 score",
-            "Matthews Correlation",
-        ],
-    )
-    df_metrics["Iter"] = df_metrics["Iter"].astype(int)
-    df_metrics = df_metrics.sort_values(by=["Method", "Type", "Percent", "Iter"])
-    return df_metrics
+    evaluation_df = gather_data_study3(evaluation_list)
+    return evaluation_df

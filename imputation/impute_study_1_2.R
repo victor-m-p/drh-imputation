@@ -44,31 +44,31 @@ dataset_id_strings <- generate_datasets_ids_string(question_level, max_level = m
 # mode impute
 print('Mode imputation')
 mode_impute <- run_imputation(data_class, dataset_id_strings, question_level, mode_impute)
-write_imputations(data = mode_impute, study = study, algorithm = "mode", appendix = "mode")
+write_imputations(data = mode_impute, study = study, algorithm = "mode")
 
 # random forest impute
 print('Random Forest imputation')
 rf_impute <- run_imputation(data_class, dataset_id_strings, question_level, rf_impute, seed = seed)
-write_imputations(data = rf_impute, study = study, algorithm = "missForest", appendix = "mf")
+write_imputations(data = rf_impute, study = study, algorithm = "missForest")
 
 # mice impute
 print('MICE imputation')
 mice_impute_baseline <- run_imputation(data_class, dataset_id_strings, question_level, mice_impute, seed = seed)
-write_imputations(data = mice_impute_baseline, study = study, algorithm = "mice", appendix = "mice")
+write_imputations(data = mice_impute_baseline, study = study, algorithm = "mice")
 
 # also why not run e.g., random forest
 print('MICE rf')
 mice_impute_rf <- run_imputation(data_class, dataset_id_strings, question_level, mice_impute, seed, method = 'rf')
-write_imputations(data = mice_impute_rf, study = study, algorithm = "miceRF", appendix = "miceRF")
+write_imputations(data = mice_impute_rf, study = study, algorithm = "miceRF")
 
 print('MICE pmm')
 mice_impute_pmm <- run_imputation(data_class, dataset_id_strings, question_level, mice_impute, seed = seed, method = 'pmm')
-write_imputations(data = mice_impute_pmm, study = study, algorithm = "micePMM", appendix = "micePMM")
+write_imputations(data = mice_impute_pmm, study = study, algorithm = "micePMM")
 
 print('MICE cart')
 mice_impute_cart <- run_imputation(data_class, dataset_id_strings, question_level, mice_impute, seed = seed, method = 'cart')
-write_imputations(data = mice_impute_cart, study = study, algorithm = "miceCART", appendix = "miceCART")
+write_imputations(data = mice_impute_cart, study = study, algorithm = "miceCART")
 
 print('MICE sample')
 mice_impute_sample <- run_imputation(data_class, dataset_id_strings, question_level, mice_impute, seed = seed, method = 'sample')
-write_imputations(data = mice_impute_sample, study = study, algorithm = "miceSample", appendix = "miceSample")
+write_imputations(data = mice_impute_sample, study = study, algorithm = "miceSample")

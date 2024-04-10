@@ -143,7 +143,7 @@ mode_impute <- function(data) {
 }
 
 # Save files
-write_imputations <- function(data, study, algorithm, appendix) {
+write_imputations <- function(data, study, algorithm) {
   # Create the base directory based on the study number
   base_dir <- paste0("output/study", study)
   
@@ -154,7 +154,7 @@ write_imputations <- function(data, study, algorithm, appendix) {
   }
 
   # Use mapply to write each element of the data list to its own CSV file
-  invisible(mapply(write_csv, data, paste0(algo_dir, "/", appendix, "_", names(data), '.csv'), SIMPLIFY = FALSE))
+  invisible(mapply(write_csv, data, paste0(algo_dir, "/", algorithm, "_", names(data), '.csv'), SIMPLIFY = FALSE))
 }
 
 
