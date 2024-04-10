@@ -61,7 +61,6 @@ question_overview = question_overview[
 ].drop_duplicates()
 question_overview.to_csv("../data/preprocessed/question_overview.csv", index=False)
 
-
 # only take the questions that appear in both polls
 questions_v5 = (
     questions[questions["poll"] == "Religious Group (v5)"]["question_id"]

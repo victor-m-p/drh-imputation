@@ -158,7 +158,7 @@ def multiple_lineplots(
         handles, labels = ax[0].get_legend_handles_labels()
         ncol = ncol_legend if ncol_legend else len(handles)
         nrow = int(np.ceil(n_subplots / ncol))
-        y_align_legend = -0.08 * nrow
+        y_align_legend = -0.1 * nrow
         fig.legend(
             handles,
             labels,

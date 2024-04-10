@@ -1,9 +1,8 @@
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from evaluation_functions import multiple_lineplots, single_lineplot
 
+# setup
+outpath = "../figures/study1"
 df_metrics = pd.read_csv("evaluation/metrics_study1.csv")
 df_long = pd.melt(
     df_metrics,
@@ -20,7 +19,7 @@ multiple_lineplots(
     hue="Method",
     grid="metric",
     ncol_legend=4,
-    outpath="../figures/study1",
+    outpath=outpath,
     outname="overall_metrics.png",
 )
 
@@ -43,7 +42,7 @@ single_lineplot(
     metric="Squared Difference",
     hue="Method",
     ncol_legend=4,
-    outpath="../figures/study1",
+    outpath=outpath,
     outname="correlation_difference.png",
 )
 
@@ -52,124 +51,89 @@ miceRF (best), miceCART (second), missForest (third)
 MICE (standard) doing worse than mode is surprising.
 """
 
-### additional plots ###
-
-## correlation
-
-# correlation by missingness mechanism #
+# correlation by missingness mechanism
 multiple_lineplots(
     df=pairwise_corr,
     grid="Type",
     metric="Squared Difference",
     hue="Method",
-    legend=True,
-    figsize=(7, 7),
-    sharey="all",
-)
-
-# correlation by question #
-multiple_lineplots(
-    df=pairwise_corr,
-    grid="method",
-    metric="Squared Difference",
-    hue="pairs",
-    legend=False,
-    figsize=(7, 7),
-    alpha=0.5,
-    color="tab:grey",
-    sharey="all",
-)
-
-## overall metrics
-
-# overall metrics by missingness mechanism #
-multiple_lineplots(
-    df=df_metrics,
-    metric="Accuracy",
-    hue="method",
-    grid="type",
-    sharey="all",
     ncol_legend=4,
+    outpath=outpath,
+    outname="correlation_difference_missingness.png",
 )
+
+"""
+Surprisingly similar.
+"""
+
+# prediction by question (for missForest)
+df_long_missforest = df_long[df_long["Method"] == "missForest"]
+
+# map questions
+df_questions = pd.read_csv("../data/preprocessed/question_overview.csv")
+from constants import question_mapping_study1
+
+df_question_names = pd.DataFrame(
+    question_mapping_study1.items(), columns=["question_id", "question_name_short"]
+)
+df_questions = df_questions.merge(df_question_names, on="question_id", how="inner")
+df_questions["question_id"] = df_questions["question_id"].astype(str)
+df_questions["question_id"] = "X" + df_questions["question_id"]
+df_questions = df_questions.rename(columns={"question_id": "Question"})
+
+# merge with missforest and select questions to display
+df_long_missforest = df_long_missforest.merge(df_questions, on="Question", how="inner")
+df_long_missforest[["Question", "question_name_short"]].drop_duplicates()
+
+selected_questions = [
+    "Afterlife belief",
+    "Spirit-body distinction",
+    "Supernatural beings",
+    "Supreme high god",
+    "Supernatural monitoring",
+    "Sacrifice adults",
+    "Written language",
+    "Scriptures",
+]
+
+df_long_missforest = df_long_missforest[
+    df_long_missforest["question_name_short"].isin(selected_questions)
+]
+
 multiple_lineplots(
-    df=df_metrics,
-    metric="Mean Percent Bias",
-    hue="method",
-    grid="type",
-    sharey="all",
-    ncol_legend=4,
+    df=df_long_missforest,
+    metric="values",
+    hue="question_name_short",
+    grid="metric",
+    ncol_legend=2,
+    outpath=outpath,
+    outname="questions_missforest.png",
 )
-multiple_lineplots(
-    df=df_metrics,
-    metric="Matthews Correlation",
-    hue="method",
-    grid="type",
-    sharey="all",
-    ncol_legend=4,
-)
-
-# overall metrics by question #
-multiple_lineplots(
-    df=df_metrics,
-    metric="Accuracy",
-    hue="question",
-    grid="method",
-    color="tab:grey",
-    legend=False,
-    sharey="all",
-)
-multiple_lineplots(
-    df=df_metrics,
-    metric="Matthews Correlation",
-    hue="question",
-    grid="method",
-    color="tab:grey",
-    legend=False,
-    sharey="all",
-)
-multiple_lineplots(
-    df=df_metrics,
-    metric="Mean Percent Bias",
-    hue="question",
-    grid="method",
-    color="tab:grey",
-    legend=False,
-    sharey="all",
-)
-
-## explaining question variation
-df_overall = pd.read_csv("../Data/Preprocessed/answers_study1.csv")
-columns = [x for x in df_overall.columns if x.startswith("X")]
-df_overall = df_overall[columns]
-df_global_average = (
-    df_overall.mean().reset_index(name="Global Average").sort_values("Global Average")
-)
-df_mean_metrics = (
-    df_metrics.groupby(["question", "method"])[
-        ["Accuracy", "Mean Percent Bias", "Matthews Correlation"]
-    ]
-    .agg("mean")
-    .reset_index()
-)
-df_mean_metrics = df_mean_metrics.merge(
-    df_global_average, left_on="question", right_on="index"
-)
-
-
-def plot_scatter(df, x, y, jitter=0):
-    fig, ax = plt.subplots()
-    df[x] = df[x] + np.random.normal(0, jitter, len(df))
-    df[y] = df[y] + np.random.normal(0, jitter, len(df))
-    sns.scatterplot(data=df, x=x, y=y, hue="method")
-    plt.show()
-
-
-plot_scatter(df_mean_metrics, "Global Average", "Accuracy", jitter=0.01)
-plot_scatter(df_mean_metrics, "Global Average", "Mean Percent Bias", jitter=0.01)
-plot_scatter(df_mean_metrics, "Global Average", "Matthews Correlation", jitter=0.01)
 
 """ 
-Accuracy: higher for extreme (almost all 1 or 0) across methods. 
-Mean Percent Bias: lower for extreme (almost all 1 or 0) -- MICE stable. 
-Matthews Correlation: lower for extreme (almost all 1 or 0) across methods. 
+Some are almost always yes (supernatural beings) giving:
+- no bias
+- perfect accuracy
+- worst possible MCC (consider just not including these for MCC).
+"""
+
+# understanding why some are great and some are bad.
+answers_study1 = pd.read_csv("../data/preprocessed/answers_study1.csv")
+question_columns = df_questions["Question"].unique().tolist()
+answers_study1 = answers_study1[question_columns]
+fraction_yes = answers_study1.mean().reset_index(name="fraction_yes")
+fraction_yes = fraction_yes.rename(
+    columns={"index": "Question", "fraction_yes": "Fraction Yes"}
+)
+fraction_yes = fraction_yes.merge(df_questions, on="Question", how="inner")
+fraction_yes = fraction_yes.sort_values("Fraction Yes", ascending=False)
+
+""" 
+some really hard because almost always yes: 
+- supernatural beings present: 99.63% yes 
+- belief in afterlife: 96.75% yes
+- spirit-body distinction: 96.03% yes
+
+some really hard because almost always no:
+- adult sacrifice: 2.89% yes 
 """
