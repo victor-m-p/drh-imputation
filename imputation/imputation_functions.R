@@ -67,21 +67,6 @@ remove_na_from_constant <- function(df) {
   return(df)
 }
 
-#mice_impute <- function(data, seed, ...) {
-#  entry_id_col <- data$entry_id 
-#  data <- data %>% 
-#    select(-entry_id)
-#  
-#  # fill constant columns
-#  data <- remove_na_from_constant(data)
-#
-#  # run MICE imputation
-#  MICE_imp <- mice::mice(data, m = 1, print = FALSE, seed = seed, nnet.MaxNWts = 10000, remove.collinear=FALSE, ...)
-#  MICE_imputed <- mice::complete(MICE_imp)
-#  MICE_imputed <- cbind(entry_id_col, MICE_imputed)
-#  return(MICE_imputed)
-#} 
-
 mice_impute <- function(data, seed, m, ...) {
   entry_id_col <- data$entry_id 
   data <- data %>% 
@@ -99,6 +84,7 @@ mice_impute <- function(data, seed, m, ...) {
     MICE_imputed <- cbind(entry_id_col, MICE_imputed)
     return(MICE_imputed)
   }
+
   else {
     # Initialize an empty list to store each imputed dataset
     imputed_datasets <- list()
@@ -156,7 +142,6 @@ write_imputations <- function(data, study, algorithm) {
   # Use mapply to write each element of the data list to its own CSV file
   invisible(mapply(write_csv, data, paste0(algo_dir, "/", algorithm, "_", names(data), '.csv'), SIMPLIFY = FALSE))
 }
-
 
 # helper function for update child entries
 # when we want to check for zero 

@@ -1,0 +1,580 @@
+question_id,question_name
+4651,Print sources for understanding this subject:
+4652,Online sources for understanding this subject:
+4653,Relevant online primary textual corpora (original languages and/or translations):
+4654,Are other religious groups in cultural contact with target religion:
+4655,Is the cultural contact competitive:
+4656,Is the cultural contact accommodating/pluralistic:
+4657,Is the cultural contact neutral:
+4658,Is there violent conflict (within sample region):
+4659,Is there violent conflict (with groups outside the sample region):
+4660,Does the religious group have a general process/system for assigning religious affiliation:
+4661,Assigned at birth (membership is default for this society):
+4662,Assigned by personal choice:
+4663,Assigned by class:
+4664,Assigned at a specific age:
+4665,Assigned by gender:
+4666,Assigned by participation in a particular ritual:
+4667,Assigned by some other factor:
+4668,Does the religious group actively proselytize and recruit new members:
+4669,Is proselytizing mandated for religious professionals:
+4670,Is proselytizing mandated for all adherents:
+4671,Is missionary work mandated for religious professionals:
+4672,Is missionary work mandated for all adherents:
+4673,Is proselytization coercive:
+4676,Does the religion have official political support
+4677,Are the priests paid by polity:
+4678,Is religious infrastructure paid for by the polity:
+4679,Are the head of the polity and the head of the religion the same figure:
+4680,Are political officials equivalent to religious officials:
+4681,Is religious observance enforced by the polity:
+4682,Polity legal code is roughly coterminous with religious code:
+4683,"Polity provides preferential economic treatment (e.g. tax, exemption)"
+4684,Is there a conception of apostasy in the religious group:
+4685,Are apostates prosecuted or punished:
+4686,Apostates are socially shunned and/or publicly vilified:
+4687,"Wealth, civil rights, and/or social capital are taken by authorities:"
+4688,Do apostates receive corporal punishment:
+4689,"Apostates are physically marked as such (e.g. branding, mutilation):"
+4690,Apostates are executed:
+4691,Apostates are publicly executed:
+4692,Other corporal punishment:
+4693,Do apostates receive divine punishment:
+4694,Punished in the afterlife:
+4695,"Cursed by ""high god"":"
+4696,Cursed by other supernatural being(s):
+4697,Other divine punishment:
+4698,Nature of religious group [please select one]:
+4699,"Number of adherents of religious group within sample region (estimated population, numerical):"
+4700,"Number of adherents of religious group within sample region (% of sample region population, numerical):"
+4701,Are there recognized leaders in the religious group:
+4702,Is there a hierarchy among these leaders:
+4703,A single leader of a local community:
+4709,Are leaders believed to possess supernatural powers or qualities:
+4716,Are religious leaders chosen:
+4717,A leader chooses his/her own replacement:
+4718,A leader’s retinue or ministers chooses the new leader:
+4719,Other leaders in the religious group choose that leader:
+4720,A political leader chooses the leader:
+4721,Other members of the leader’s congregation choose the leader:
+4722,All members of the religious group in the sample region participate in choosing the leader:
+4724,Are leaders considered fallible:
+4728,Are close followers or disciples of a religious leader required to obediently and unquestionably accept the leader's pronouncements on all matters:
+4729,Does the religious group have scriptures:
+4730,Are they written:
+4731,Are they oral:
+4732,Is there a story (or a set of stories) associated with the origin of scripture:
+4733,Revealed by a high god:
+4734,Revealed by other supernatural being:
+4735,Inspired by high god:
+4736,Inspired by other supernatural being:
+4737,Originated from divine or semi-divine human beings:
+4738,Originated from non-divine human being:
+4739,Are the scriptures alterable:
+4740,Are there formal institutions (i.e. institutions that are authorized by the religious community or political leaders) for interpreting the scriptures:
+4741,Can interpretation also take place outside these institutions:
+4743,Is there a select group of people trained in transmitting the scriptures:
+4744,Is there a codified canon of scriptures:
+4745,Is monumental religious architecture present:
+4746,"In the average settlement, what percentage of area is taken up by all religious monuments:"
+4747,"Size of largest single religious monument, square meters:"
+4748,"Height of largest single religious monument, meters:"
+4749,"Size of average monument, square meters:"
+4750,"Height of average monument, meters:"
+4751,"In the largest settlement, what percentage of area is taken up by all religious monuments:"
+4752,Are there different types of religious monumental architecture:
+4753,Tombs:
+4754,Cemeteries:
+4755,Temples:
+4756,Altars:
+4757,Devotional markers:
+4758,"Mass gathering point [plazas, courtyard, square. Places permanently demarcated using visible objects or structures]:"
+4759,Other type of religious monumental architecture:
+4760,Are there specific sites dedicated to sacred practice or considered sacred:
+4761,Are sacred site oriented to environmental features:
+4762,Are pilgrimages present:
+4763,How strict is pilgrimage:
+4764,Is iconography present:
+4765,Where is iconography present [select all that apply]:
+4766,Are there distinct features in the religious group's  iconography:
+4767,Eyes (stylized or not):
+4768,Supernatural beings (zoomorphic):
+4769,Supernatural beings (geomorphic):
+4770,Supernatural beings (anthropomorphic):
+4771,Supernatural beings (abstract symbol):
+4772,Portrayals of afterlife:
+4773,"Aspects of doctrine (e.g. cross, trinity, Mithraic symbols):"
+4774,Humans:
+4775,Other features of iconography:
+4776,Is a spirit-body distinction present:
+4777,Spirit-mind is conceived of as having qualitatively different powers or properties than other body parts:
+4778,"Spirit-mind is conceived of as non-material, ontologically distinct from body:"
+4779,Other spirit-body relationship:
+4780,Belief in afterlife:
+4781,Is the spatial location of the afterlife specified or described by the religious group:
+4782,Afterlife in specified realm of space beyond this world:
+4783,Afterlife in vaguely defined “above” space:
+4784,Afterlife in vaguely defined “below” space:
+4785,Afterlife in vaguely defined horizontal space:
+4786,"Afterlife located in ""other"" space:"
+4787,Reincarnation in this world:
+4794,Are there special treatments for adherents' corpses:
+4795,Cremation:
+4796,Mummification:
+4797,Interment:
+4798,Corpse is flexed (legs are bent or body is crouched):
+4799,Corpse is extended (lying flat on front or back):
+4800,Corpse is upright (where body is interred in standing position):
+4801,Corpse is interred some other way:
+4802,Cannibalism:
+4803,Exposure to elements (e.g. air drying):
+4804,Feeding to animals:
+4805,Secondary burial:
+4806,Re-treatment of corpse:
+4807,Other intensive (in terms of time or resources expended) treatment of corpse :
+4808,Are co-sacrifices present in tomb/burial:
+4814,Are grave goods present:
+4815,Personal effects:
+4816,Valuable items:
+4820,Other grave goods:
+4821,Are formal burials present:
+4822,As cenotaphs:
+4823,In cemetery:
+4824,Family tomb-crypt:
+4825,"Domestic (individuals interred beneath house, or in areas used for normal domestic activities):"
+4826,Other formal burial type:
+4827,Are supernatural beings present:
+4828,A supreme high god is present:
+4829,The supreme high god is anthropomorphic:
+4830,The supreme high god is a sky deity:
+4831,The supreme high god is chthonic (of the underworld):
+4832,The supreme high god is fused with the monarch (king=high god):
+4833,The monarch is seen as a manifestation or emanation of the high god:
+4834,The supreme high god is a kin relation to elites:
+4835,The supreme high god has another type of loyalty-connection to elites:
+4836,The supreme high god is unquestionably good:
+4837,Other feature(s) of supreme high god:
+4838,The supreme high god has knowledge of this world:
+4839,The supreme god's knowledge is restricted to particular domain of human affairs:
+4840,The supreme high god's knowledge is restricted to (a) specific area(s) within the sample region:
+4841,The supreme high god's knowledge is unrestricted within the sample region:
+4842,The supreme high god's knowledge is unrestricted outside of sample region:
+4843,The supreme high god can see you everywhere normally visible (in public):
+4844,"The supreme high god can see you everywhere (in the dark, at home):"
+4845,The supreme high god can see inside heart/mind (hidden motives):
+4846,The supreme high god knows your basic character (personal essence):
+4847,"The supreme high god knows what will happen to you, what you will do (future sight):"
+4848,The supreme high god has other knowledge of this world:
+4849,The supreme high god has deliberate causal efficacy in the world:
+4850,The supreme high god can reward:
+4851,The supreme high god can punish:
+4852,The supreme high god has indirect causal efficacy in the  world:
+4853,The supreme high god exhibits positive emotion:
+4854,The supreme high god exhibits negative emotion:
+4855,The supreme high god possesses hunger:
+4856,Is it permissible to worship supernatural beings other than the high god:
+4857,The supreme high god possesses/exhibits some other feature:
+4858,The supreme high god communicates with the living:
+4859,"In waking, everyday life:"
+4860,In dreams:
+4861,In trance possession:
+4862,Through divination practices:
+4863,Only through religious specialists:
+4864,Only through monarch
+4865,Other form of communication with living:
+4866,Previously human spirits are present:
+4867,Human spirits can be seen:
+4868,Human spirits can be physically felt:
+4869,Previously human spirits have knowledge of this world:
+4880,Human spirits have deliberate causal efficacy in the world:
+4883,Human spirits have indirect causal efficacy in the world:
+4884,Human spirits have memory of life:
+4885,Human spirits exhibit positive emotion:
+4886,Human spirits exhibit negative emotion:
+4887,Human spirits possess hunger:
+4888,Human spirits possess/exhibit some other feature:
+4889,Human spirits communicate with the living:
+4890,"In waking, everyday life:"
+4891,In dreams:
+4892,In trance possession:
+4893,Through divination processes:
+4894,Only through specialists:
+4895,Only through monarch:
+4896,Communicate with living through other means:
+4897,Non-human supernatural beings are present:
+4898,These supernatural beings can be seen:
+4899,These supernatural beings can be physically felt:
+4900,Non-human supernatural beings have knowledge of this world:
+4901,Non-human supernatural beings have knowledge restricted to particular domain of human affairs:
+4902,Non-human supernatural beings have knowledge restricted to (a) specific area(s) within the sample region:
+4903,Non-human supernatural beings have knowledge unrestricted within the sample region:
+4904,Non-human supernatural beings have knowledge unrestricted outside of sample region:
+4905,Non-human supernatural beings can see you everywhere normally visible (in public):
+4906,"Non-human supernatural beings can see you everywhere (in the dark, at home):"
+4907,Non-human supernatural beings can see inside heart/mind (hidden motives):
+4908,Non-human supernatural beings knows your basic character (personal essence):
+4909,"Non-human supernatural beings know what will happen to you, what you will do (future sight):"
+4910,Non-human supernatural begins have other knowledge of this world:
+4911,Non-human supernatural beings have deliberate causal efficacy in the world:
+4912,These supernatural beings can reward:
+4913,These supernatural beings can punish:
+4914,These supernatural beings have indirect causal efficacy in the world:
+4915,These supernatural beings exhibit positive emotion:
+4916,These supernatural beings exhibit negative emotion:
+4917,These supernatural beings possess hunger:
+4918,These supernatural beings possess/exhibit some other feature:
+4919,Mixed human-divine beings are present:
+4949,Does the religious group possess a variety of supernatural beings:
+4950,Organized by kinship based on a family model:
+4951,Organized hierarchically:
+4952,Power of beings is domain specific:
+4953,Other organization for pantheon:
+4954,Is supernatural monitoring present:
+4955,There is supernatural monitoring of prosocial norm adherence in particular:
+4956,Supernatural beings care about taboos:
+4957,Food:
+4958,Sacred space(s):
+4959,Sacred object(s):
+4960,Supernatural beings care about other:
+4961,Supernatural beings care about murder of coreligionists:
+4962,Supernatural beings care about murder of members of other religions:
+4963,Supernatural beings care about murder of members of other polities:
+4964,Supernatural beings care about sex:
+4965,Adultery:
+4966,Incest:
+4967,Other sexual practices:
+4968,Supernatural beings care about lying:
+4969,Supernatural beings care about honouring oaths:
+4970,Supernatural beings care about laziness:
+4971,Supernatural beings care about sorcery:
+4972,Supernatural beings care about non-lethal fighting:
+4973,Supernatural beings care about shirking risk:
+4974,Supernatural beings care about disrespecting elders:
+4975,Supernatural beings care about gossiping:
+4976,Supernatural beings care about property crimes:
+4977,Supernatural beings care about proper ritual observance:
+4978,Supernatural beings care about performance of rituals:
+4979,Supernatural beings care about conversion of non-religionists:
+4980,Supernatural beings care about economic fairness:
+4981,Supernatural beings care about personal hygiene:
+4982,Supernatural beings care about other:
+4983,Do supernatural beings mete out punishment:
+4984,Is the cause or agent of supernatural punishment known:
+4985,Done only by high god:
+4986,Done by many supernatural beings:
+4987,Done through impersonal cause-effect principle:
+4988,Done by other entities or through other means [specify]
+4989,Is the reason for supernatural punishment known:
+4990,Done to enforce religious ritual-devotional adherence:
+4991,Done to enforce group norms:
+4992,Done to inhibit selfishness:
+4993,Done randomly:
+4994,Other [specify]
+4995,Supernatural punishments are meted out in the afterlife:
+4996,Supernatural punishments in the afterlife are highly emphasized by the  religious group:
+4997,Punishment in the afterlife consists of mild sensory displeasure:
+4998,Punishment in the afterlife consists of extreme sensory displeasure:
+4999,Punishment in the afterlife consists of reincarnation as an inferior life form:
+5000,Punishment in the afterlife consists of reincarnation in an inferior realm:
+5001,Other [specify]
+5002,Supernatural punishments are meted out in this lifetime:
+5003,Supernatural punishments in this life are highly emphasized by the religious group:
+5004,Punishment in this life consists of bad luck:
+5005,Punishment in this life consists of political failure:
+5006,Punishment in this life consists of defeat in battle:
+5007,Punishment in this life consists of crop failure or bad weather:
+5008,Punishment in this life consists of disaster on journeys.
+5009,Punishment in this life consists of mild sensory displeasure:
+5010,Punishment in this life consists of extreme sensory displeasure:
+5011,Punishment in this life consists of sickness or illness:
+5012,Punishment in this life consists of impaired reproduction:
+5013,Punishment in this life consists of bad luck visited on descendants:
+5014,Other [specify]
+5015,Do supernatural beings bestow rewards:
+5016,Is the cause/purpose of supernatural rewards known:
+5017,Done only by high god:
+5018,Done by many supernatural beings:
+5019,Done through impersonal cause-effect principle:
+5020,Done to enforce religious ritual-devotional adherence:
+5021,Done to enforce group norms:
+5022,Done to inhibit selfishness :
+5023,Done randomly:
+5024,Supernatural rewards are bestowed out in the afterlife:
+5025,Supernatural rewards in the afterlife are highly emphasized by the  religious group:
+5026,Reward in the afterlife consists of mild sensory pleasure:
+5027,Reward in the afterlife consists of extreme sensory pleasure:
+5028,Reward in the afterlife consists of eternal happiness:
+5029,Reward in the afterlife consists of reincarnation as a superior life form:
+5030,Reward in the afterlife consists of reincarnation in a superior realm:
+5031,Other [specify]
+5032,Supernatural rewards are bestowed out in this lifetime:
+5033,Supernatural rewards in this life are highly emphasized by the religious group:
+5034,Reward in this life consists of good luck:
+5035,Reward in this life consists of political success or power:
+5036,Reward in this life consists of success in battle:
+5037,Reward in this life consists of peace or social stability:
+5038,Reward in this life consists of healthy crops or good weather:
+5039,Reward in this life consists of success on journeys:
+5040,Reward in this life consists of mild sensory pleasure:
+5041,Reward in this life consists of extreme sensory pleasure:
+5042,Reward in this life consists of enhanced health:
+5043,Reward in this life consists of enhanced reproductive success:
+5044,Reward in this life consists of fortune visited on descendants:
+5045,Other [specify]
+5046,Are messianic beliefs present:
+5059,Is an eschatology present:
+5077,Are general social norms prescribed by the religious group:
+5078,Is there a conventional vs. moral distinction in the religious group:
+5079,What is the nature of this distinction:
+5080,Are specifically moral norms prescribed by the religious group:
+5081,Specifically moral norms are implicitly linked to vague metaphysical concepts:
+5082,Specifically moral norms are explicitly linked to vague metaphysical entities:
+5083,Specifically moral norms are linked to impersonal cosmic order (e.g. karma):
+5084,Specifically moral norms are linked in some way to an anthropomorphic being:
+5085,Specifically moral norms are linked explicitly to commands of anthropomorphic being:
+5086,Specifically moral norms are have no special connection to metaphysical:
+5087,Moral norms apply to:
+5088,Are there centrally important virtues advocated by the religious group:
+5089,Honesty / trustworthiness / integrity:
+5090,Courage (in battle):
+5091,Courage (generic):
+5092,Compassion / empathy / kindness / benevolence:
+5093,Mercy / forgiveness / tolerance:
+5094,Generosity / charity:
+5095,Selflessness / selfless giving:
+5096,Righteousness / moral rectitude:
+5097,Ritual purity / ritual adherence / abstention from sources of impurity:
+5098,Respectfulness / courtesy:
+5099,Familial obedience / filial piety:
+5100,Fidelity / loyalty:
+5101,Cooperation:
+5102,Independence / creativity / freedom:
+5103,Moderation / frugality:
+5104,Forbearance / fortitude / patience:
+5105,Diligence / self-discipline / excellence:
+5106,Assertiveness / decisiveness / confidence / initiative:
+5107,Strength (physical):
+5108,Power / status / nobility:
+5109,Humility / modesty:
+5110,Contentment / serenity / equanimity:
+5111,Joyfulness / enthusiasm / cheerfulness:
+5112,Optimism / hope:
+5113,Gratitude / thankfulness:
+5114,Reverence / awe / wonder:
+5115,Faith / belief / trust / devotion:
+5116,Wisdom / understanding:
+5117,Discernment / intelligence:
+5118,Beauty / attractiveness:
+5119,Cleanliness (physical) / orderliness:
+5120,Other important virtues advocated by the religious group:
+5121,Does membership in this religious group require celibacy (full sexual abstinence):
+5122,Does membership in this religious group require constraints on sexual activity (partial sexual abstinence):
+5123,Monogamy (males):
+5124,Monogamy (females):
+5125,Other sexual constraints (males):
+5126,Other sexual constraints (females):
+5127,Does membership in this religious group require castration:
+5128,Does membership in this religious group require fasting:
+5129,Does membership in this religious group require forgone food opportunities (taboos on desired foods):
+5130,Does membership in this religious group require permanent scarring or painful bodily alterations:
+5131,Does membership in this religious group require painful physical positions or transitory painful wounds:
+5132,Does membership in this religious group require sacrifice of adults:
+5133,"Foreign, slaves:"
+5134,Commoners:
+5135,Elites:
+5136,Other:
+5137,Does membership in this religious group require sacrifice of children:
+5142,Does membership in this religious group require self-sacrifice (suicide):
+5143,Does membership in this religious group require sacrifice of property/valuable items:
+5148,"Does membership in this religious group require sacrifice of time (e.g., attendance at meetings or services, regular prayer, etc.):"
+5149,Does membership in this religious group require physical risk taking:
+5150,Does membership in this religious group require accepting ethical precepts:
+5151,Does membership in this religious group require marginalization by out-group members:
+5152,"Does membership in this religious group require participation in small-scale rituals (private, household):"
+5153,What is the average interval of time between performances (in hours):
+5154,Does membership in this religious group require participation in large-scale rituals:
+5161,Are extra-ritual in-group markers present:
+5170,Does the group employ fictive kinship terminology:
+5174,The society to which the religious group belongs is best characterized as (please choose one):
+5175,Does the religious group in question provide institutionalized famine relief:
+5176,Is famine relief available to the group's adherents through an institution(s) other than the religious group in question:
+5177,Does the religious group in question provide institutionalized poverty relief:
+5178,Is poverty relief available to the group's adherents through an institution(s) other than the religious group in question:
+5179,Does the religious group in question provide institutionalized care for the elderly and infirm:
+5180,Is institutionalized care for the elderly and infirm available to the group's adherents through an institution(s) other than the religious group in question:
+5181,Does the religious group provide formal education to its adherents:
+5182,Is formal education restricted to religious professionals:
+5183,Is such education open to both males and females:
+5184,Is formal education available to the group’s adherents through an institution(s) other than the religious group:
+5186,Do the group’s adherents interact with a formal bureaucracy within their group:
+5187,Do the group’s adherents interact with other institutional bureaucracies:
+5188,Does the religious group in question provide public food storage:
+5189,Is public food storage provided to the group’s adherents by an institution(s) other than the religious group in question:
+5190,"Does the religious group in question provide water management (irrigation, flood control):"
+5191,Is water management provided to the group’s adherents by an institution(s) other than the religious group in question:
+5192,Does the religious group in question provide transportation infrastructure:
+5193,Is transportation infrastructure provided for the group’s adherents by an institution(s) other than the religious group in question:
+5194,Does the religious group in question levy taxes or tithes:
+5195,Are taxes levied on the group’s adherents by an institution(s) other than the religious group in question:
+5196,Does the religious group in question provide an institutionalized police force:
+5197,Do the group’s adherents interact with an institutionalized police force provided by an institution(s) other than the religious group in question:
+5198,Does the religious group in question provide institutionalized judges:
+5199,Do the group’s adherents interact with an institutionalized judicial system provided by an an institution(s) other than the religious group in question:
+5200,Does the religious group in question enforce institutionalized punishment:
+5201,Do the institutionalized punishments include execution:
+5202,Do the institutionalized punishments include exile:
+5203,Do the institutionalized punishments include corporal punishments:
+5204,Do the institutionalized punishments include ostracism:
+5205,Do the institutionalized punishments include seizure of property:
+5206,Are the group’s adherents subject to institutionalized punishment enforced by an institution(s) other than the religious group in question:
+5212,Does the religious group in question have a formal legal code:
+5213,Are the group’s adherents subject to a formal legal code provided by institution(s) other than the religious group in question:
+5214,Does religious group in question possess an institutionalized military:
+5215,Does the religious group in question have the power to conscript:
+5216,Does the religious group in question maintain a full-time military corps (e.g. Swiss Guard):
+5217,Does the religious group in question maintain a standing army:
+5218,Do the group’s adherents participate in an institutionalized military provided by institution(s) other than the religious group in question:
+5219,Are the group’s adherents protected by or subject to an institutionalized military provided by an institution(s) other than the religious group in question:
+5220,Does the religious group in question possess its own distinct written language:
+5222,Is a non-religion-specific written language available to the group’s adherents through an institution(s) other than the religious group in question:
+5223,Is a non-religion-specific written language used by the group’s adherents through an institution(s) other than the religious group in question:
+5224,Does the religious group in question possess a formal calendar:
+5225,Is a formal calendar provided for the group’s adherents by an institution(s) other than the religious group in question:
+5226,Does the religious group in question provide food for themselves:
+5227,Please characterize the forms/level of food production [choose all that apply]:
+5228,Is food provided to the group’s adherents by an institution(s) other than the religious group in question:
+5229,Please characterize the forms/levels of food production [choose all that apply]:
+5155,"On average, for large-scale rituals how many participants gather in one location:"
+5156,What is the average interval of time between performances (in hours):
+5157,Are there orthodoxy checks:
+5158,Are there orthopraxy checks:
+5159,Does participation entail synchronic practices:
+5160,Is there use of intoxicants:
+4870,Human spirits' knowledge restricted to particular domain of human affairs:
+4871,Human spirits' knowledge restricted to (a) specific area(s) within the sample region:
+4872,Human spirits' knowledge unrestricted within the sample region:
+4873,Human spirits' knowledge unrestricted outside of sample region:
+4874,Human spirits can see you everywhere normally visible (in public):
+4875,"Human spirits can see you everywhere (in the dark, at home):"
+4876,Human spirit's can see inside heart/mind (hidden motives):
+4877,Human spirits know your basic character (personal essence):
+4878,"Human spirits know what will happen to you, what you will do (future sight):"
+4879,Human spirits have other form(s) of knowledge regarding this world:
+4881,Human spirits can reward:
+4882,Human spirits can punish:
+5047,Is the messiah's whereabouts or time of coming known?
+5055,Is the messiah's purpose known:
+5056,Messiah is a political figure who restores political rule:
+5057,Messiah is a priestly figure who restores religious traditions:
+5058,Other purpose:
+5185,Is extra-religious education open to both males and females:
+5207,Do the institutionalized punishments include execution:
+5208,Do the institutionalized punishments include exile:
+5209,Do the institutionalized punishments include corporal punishments:
+5210,Do the institutionalized punishments include ostracism:
+5211,Do the institutionalized punishments include seizure of property:
+5144,To other in-group members:
+5145,To out-groups:
+5146,Destroyed:
+5147,Other:
+4704,"Multiple religious communities each with its own leader, no hierarchy among these leaders:"
+4705,"""Regional"" leaders who oversee one or more local leader(s) (e.g. bishops):"
+4706,A single leader for the religious group that oversees all other leaders in the sample region:
+4707,A council or group of leaders for the religious group that oversees all other leaders in the sample region:
+4708,Estimate how many levels there are in the hierarchy of religious leadership:
+4723,Communication with supernatural power(s) believed to be part of the selection process:
+4725,Charges of fallibility made by a leader's own followers:
+4726,Charges of fallibility made by other leaders in the religious group:
+4727,Charges of fallibility made by a political ruler:
+4788,In a human form:
+4789,In animal/plant form:
+4790,In form of an inanimate object(s):
+4791,"In non-individual form (i.e. some form of corporate rebirth, tribe, lineage. etc.):"
+4792,Reincarnation linked to notion of life-transcending causality (e.g. karma):
+4793,Other form of reincarnation in this world:
+4809,Human sacrifices present:
+4813,Animal co-sacrifices present:
+4817,"Significant wealth (e.g. gold, jade, intensely worked objects):"
+4818,Some wealth (some valuable or useful objects interred):
+4819,Other valuable/precious items interred:
+4920,These mixed human-divine beings can be seen:
+4921,These mixed human-divine beings can be physically felt:
+4922,Mixed human-divine beings have knowledge of this world:
+4923,Mixed human-divine beings have knowledge restricted to particular domain of human affairs:
+4924,Mixed human-divine beings have knowledge restricted to (a) specific area(s) within the sample region:
+4925,Mixed human-divine beings have knowledge unrestricted within the sample region:
+4926,Mixed human-divine beings have knowledge unrestricted outside of sample region:
+4927,Mixed human-divine beings can see you everywhere normally visible (in public):
+4928,"Mixed human-divine beings can see you everywhere (in the dark, at home):"
+4929,Mixed human-divine beings can see inside heart/mind (hidden motives):
+4930,Mixed human-divine beings know your basic character (personal essence):
+4931,"Mixed human-divine beings know what will happen to you, what you will do (future sight):"
+4932,Mixed human-divine beings have other knowledge of the human world:
+4933,These mixed human-divine beings have deliberate causal efficacy in the world:
+4934,These mixed human-divine beings can reward:
+4935,These mixed human-divine beings can punish:
+4936,These mixed human-divine beings have indirect causal efficacy in the world:
+4937,These mixed human-divine beings exhibit positive emotion:
+4938,These mixed human-divine beings exhibit negative emotion:
+4939,These mixed human-divine beings possess hunger:
+4940,These mixed human-divine beings possess/exhibit some other feature:
+4941,Mixed human-divine beings communicate with the living:
+4942,"In waking, everyday life:"
+4943,In dreams:
+4944,In trance possession:
+4945,Through divination practices:
+4946,Only through religious specialists:
+4947,Only through monarch:
+4948,Other form of communication with living:
+5171,Fictive kinship terminology universal:
+5172,Fictive kinship terminology widespread:
+5173,Fictive kinship terminology employed but uncommon:
+4742,Interpretation is only allowed by officially sanctioned figures:
+5162,Tattoos/scarification:
+5163,Circumcision:
+5164,Food taboos:
+5165,Hair:
+5166,Dress:
+5167,Ornaments:
+5168,Archaic ritual language:
+5169,Other:
+4674,Does the coercion take the form of physical force:
+4675,Does the coercion take the form of economic sanctions:
+4710,Powers are acquired by individual deeds carried out in past lives:
+4711,Powers are acquired by individual deeds carried out in the current life:
+4712,Powers are inherited:
+4713,Powers are culturally transmitted from a supernatural being:
+4714,Powers are culturally transmitted from another human (e.g. teacher):
+4715,Powers are associated with leadership office they assume:
+5221,Is use of this distinct written language confined to religious professionals:
+5060,Eschaton in this lifetime:
+5061,Eschaton at specified time in future:
+5062,Eschaton at unspecified time in near future:
+5063,Eschaton at unspecified time in distant future:
+5064,Eschaton at some other time:
+5065,Adherents need to perform specific tasks to bring about World's end:
+5066,Divine judgment event:
+5067,Restoration of the world:
+5068,Start of a new temporal cycle:
+5069,Establishment of a new political system:
+5070,Establishment of a new religious system:
+5071,Will anyone survive the eschaton:
+5072,All religious in-group members will survive the eschaton:
+5073,A subset of religion in-group members will survive the eschaton:
+5074,All members of the sample region will survive the eschaton:
+5075,Everyone in the world will survive the eschaton:
+5076,Other survival condition:
+5048,"Alive, identified:"
+5049,Coming in this lifetime:
+5050,Coming on specified date:
+5051,Coming in unspecified time in near future:
+5052,Coming in unspecified time in distant future:
+5053,Coming has already passed:
+5054,One in a line of many past and future messiahs:
+4810,Out-group humans are sacrificed:
+4811,In-group humans are sacrificed:
+4812,Other humans are sacrificed:
+5138,"Foreign, slaves:"
+5139,Commoners:
+5140,Elites:
+5141,Other:

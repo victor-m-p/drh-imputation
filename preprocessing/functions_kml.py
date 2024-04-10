@@ -13,6 +13,8 @@ import geopandas as gpd
 from geopandas.tools import overlay
 from shapely import wkt
 
+pd.options.mode.chained_assignment = None
+
 
 class OutputFormat(Enum):
     Geojson = "geojson"
@@ -184,8 +186,8 @@ def geom_to_geojson(geometry):
 ### current approach for getting land area coverage ###
 def get_all_land():
     # Read the data into GeoDataFrames
-    minor_islands = gpd.read_file("../Data/naturalearth/ne_10m_minor_islands.shp")
-    land = gpd.read_file("../Data/naturalearth/ne_10m_land.shp")
+    minor_islands = gpd.read_file("../data/naturalearth/ne_10m_minor_islands.shp")
+    land = gpd.read_file("../data/naturalearth/ne_10m_land.shp")
 
     # concat
     all_land = gpd.pd.concat([land, minor_islands], ignore_index=True)

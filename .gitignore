@@ -1,3 +1,7 @@
-mputation/sanity_checks.py
 evaluation/explanation.R
-data
+data/raw
+data/dump
+data/naturalearth
+imputation/check_imputation_methods.R
+imputation/develop_s3.R
+imputation/sanity_checks.py

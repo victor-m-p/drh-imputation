@@ -25,35 +25,34 @@ questions <- read_csv("../data/preprocessed/answers.csv", show_col_types = FALSE
 questions <- questions %>% select(question_id, data_type) %>% distinct()
 
 # Create index of variable types for GLRM and conversion of data type
-print('fix variable types')
 var_types <- lapply(data_missing, variables_types)
 
 # Convert variables to correct class
-print('correct variable classes')
 data_class <- Map(correct_class, data_missing, var_types)
 
-## dataset id strings
+# dataset id strings
 question_level <- read_csv(paste0("../data/preprocessed/question_level_study1.csv"), show_col_types = FALSE)
 dataset_id_strings <- generate_datasets_ids_string(question_level, max_level = max(question_level$question_level))
 
-# mice impute
-print('MICE imputation')
-mice_impute_baseline <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m, seed = seed)
-write_imputations(data = mice_impute_baseline, study = study, algorithm = "mice", appendix = "mice")
+## start imputation ##
+print("Starting imputation for study: 3")
 
-# also why not run e.g., random forest
+print('mice baseline')
+mice_impute_baseline <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m = m, seed = seed)
+write_imputations(data = mice_impute_baseline, study = study, algorithm = "mice")
+
 print('MICE rf')
-mice_impute_rf <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m, seed, method = 'rf')
-write_imputations(data = mice_impute_rf, study = study, algorithm = "miceRF", appendix = "miceRF")
+mice_impute_rf <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m = m, seed = seed, method = 'rf')
+write_imputations(data = mice_impute_rf, study = study, algorithm = "miceRF")
 
 print('MICE pmm')
-mice_impute_pmm <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m, seed = seed, method = 'pmm')
-write_imputations(data = mice_impute_pmm, study = study, algorithm = "micePMM", appendix = "micePMM")
+mice_impute_pmm <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m = m, seed = seed, method = 'pmm')
+write_imputations(data = mice_impute_pmm, study = study, algorithm = "micePMM")
 
 print('MICE cart')
-mice_impute_cart <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m, seed = seed, method = 'cart')
-write_imputations(data = mice_impute_cart, study = study, algorithm = "miceCART", appendix = "miceCART")
+mice_impute_cart <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m = m, seed = seed, method = 'cart')
+write_imputations(data = mice_impute_cart, study = study, algorithm = "miceCART")
 
 print('MICE sample')
-mice_impute_sample <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m, seed = seed, method = 'sample')
-write_imputations(data = mice_impute_sample, study = study, algorithm = "miceSample", appendix = "miceSample")
+mice_impute_sample <- run_multiple_imputation(data_class, dataset_id_strings, question_level, mice_impute, m = m, seed = seed, method = 'sample')
+write_imputations(data = mice_impute_sample, study = study, algorithm = "miceSample")
